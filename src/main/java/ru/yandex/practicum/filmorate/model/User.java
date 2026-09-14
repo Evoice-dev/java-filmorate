@@ -18,7 +18,7 @@ public class User {
     public String login;
     public String name;
     public LocalDate birthday;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @JsonCreator
     public User(@JsonProperty("email") String email, @JsonProperty("name") String name, @JsonProperty("login") String login, @JsonProperty("birthday") String birthday) throws ValidationException {

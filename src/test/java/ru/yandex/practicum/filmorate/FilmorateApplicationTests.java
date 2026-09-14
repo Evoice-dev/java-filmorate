@@ -15,7 +15,7 @@ class FilmorateApplicationTests {
     @Test
     @DisplayName("Корректный фильм создаётся")
     void shouldCreateValidFilm() throws ValidationException {
-        Film film = new Film("Inception", "Dreams", "16.07.2010", 148);
+        Film film = new Film("Inception", "Dreams", "2010-07-16", 148);
 
         assertEquals("Inception", film.getName());
         assertEquals("Dreams", film.getDescription());
@@ -28,7 +28,7 @@ class FilmorateApplicationTests {
     @DisplayName("Пустое название")
     void shouldRejectEmptyName() {
         ValidationException ex = assertThrows(ValidationException.class,
-                () -> new Film("", "Desc", "16.07.2010", 100));
+                () -> new Film("", "Desc", "2010-07-16", 100));
         assertEquals("Название не может быть пустым", ex.getMessage());
     }
 
@@ -37,7 +37,7 @@ class FilmorateApplicationTests {
     @DisplayName("Описание ровно 200 символов - допустимо")
     void shouldAccept200CharDescription() throws ValidationException {
         String desc = "a".repeat(200);
-        assertDoesNotThrow(() -> new Film("Name", desc, "16.07.2010", 100));
+        assertDoesNotThrow(() -> new Film("Name", desc, "2010-07-16", 100));
     }
 
     @Test
@@ -45,7 +45,7 @@ class FilmorateApplicationTests {
     void shouldReject201CharDescription() {
         String desc = "a".repeat(201);
         ValidationException ex = assertThrows(ValidationException.class,
-                () -> new Film("Name", desc, "16.07.2010", 100));
+                () -> new Film("Name", desc, "2010-07-16", 100));
         assertEquals("Максимальная длина описания - 200 символов", ex.getMessage());
     }
 
@@ -53,7 +53,7 @@ class FilmorateApplicationTests {
     @DisplayName("Дата релиза ровно 28.12.1895 - допустима")
     void shouldAcceptFirstEverFilmDate() throws ValidationException {
         Film film = new Film("L'Arrivée d'un train", "First film",
-                "28.12.1895", 1);
+                "1895-12-28", 1);
         assertNotNull(film.getReleaseDate());
     }
 
@@ -61,21 +61,21 @@ class FilmorateApplicationTests {
     @DisplayName("Дата релиза до 28.12.1895")
     void shouldRejectReleaseBeforeMinimum() {
         ValidationException ex = assertThrows(ValidationException.class,
-                () -> new Film("Name", "Desc", "19.12.1895", 100));
+                () -> new Film("Name", "Desc", "1895-12-19", 100));
         assertEquals("Дата релиза должна быть не раньше 28 декабря 1895 года", ex.getMessage());
     }
 
     @Test
     @DisplayName("Дата релиза ровно 28.12.1895 - проходит по коду (граничный случай)")
     void shouldAcceptExactlyMinimumDateInCode() throws ValidationException {
-        Film film = new Film("Name", "Desc", "28.12.1895", 1);
+        Film film = new Film("Name", "Desc", "1895-12-28", 1);
         assertNotNull(film.getReleaseDate());
     }
 
     @Test
     @DisplayName("duration = 0 - допустимо")
     void shouldAcceptZeroDuration() throws ValidationException {
-        Film film = new Film("Name", "Desc", "16.07.2010", 0);
+        Film film = new Film("Name", "Desc", "2010-07-16", 0);
         assertEquals(0, film.getDuration().getHour());
         assertEquals(0, film.getDuration().getMinute());
     }
@@ -84,14 +84,14 @@ class FilmorateApplicationTests {
     @DisplayName("duration < 0")
     void shouldRejectNegativeDuration() {
         ValidationException ex = assertThrows(ValidationException.class,
-                () -> new Film("Name", "Desc", "16.07.2010", -1));
+                () -> new Film("Name", "Desc", "2010-07-16", -1));
         assertEquals("Продолжительность должна быть положительным числом", ex.getMessage());
     }
 
     @Test
     @DisplayName("duration = 90 - 01:30")
     void shouldConvertDurationToLocalTime() throws ValidationException {
-        Film film = new Film("Name", "Desc", "16.07.2010", 90);
+        Film film = new Film("Name", "Desc", "2010-07-16", 90);
         assertEquals(1, film.getDuration().getHour());
         assertEquals(30, film.getDuration().getMinute());
     }
@@ -99,7 +99,7 @@ class FilmorateApplicationTests {
     @Test
     @DisplayName("duration = 60 - 01:00")
     void shouldConvertExactly60Minutes() throws ValidationException {
-        Film film = new Film("Name", "Desc", "16.07.2010", 60);
+        Film film = new Film("Name", "Desc", "2010-07-16", 60);
         assertEquals(1, film.getDuration().getHour());
         assertEquals(0, film.getDuration().getMinute());
     }
@@ -107,8 +107,8 @@ class FilmorateApplicationTests {
     @Test
     @DisplayName("equals работает по id")
     void shouldCompareById() throws ValidationException {
-        Film a = new Film("A", "D", "01.01.2000", 90);
-        Film b = new Film("B", "D", "02.02.2001", 100);
+        Film a = new Film("A", "D", "2000-01-01", 90);
+        Film b = new Film("B", "D", "2001-02-02", 100);
         a.setId(1);
         b.setId(1);
         assertEquals(a, b);
@@ -117,7 +117,7 @@ class FilmorateApplicationTests {
     @Test
     @DisplayName("Корректный пользователь создаётся")
     void shouldCreateValidUser() throws ValidationException {
-        User user = new User("test@mail.ru", "Test", "testlogin", "31.03.2002");
+        User user = new User("test@mail.ru", "Test", "testlogin", "2002-03-31");
 
         assertEquals("test@mail.ru", user.getEmail());
         assertEquals("testlogin", user.getLogin());
@@ -130,7 +130,7 @@ class FilmorateApplicationTests {
     @Test
     @DisplayName("Пустое имя заменяется логином")
     void shouldUseLoginAsNameIfNameIsEmpty() throws ValidationException {
-        User user = new User("test@mail.ru", "", "testlogin", "31.03.2002");
+        User user = new User("test@mail.ru", "", "testlogin", "2002-03-31");
         assertEquals("testlogin", user.getName());
     }
 
@@ -138,7 +138,7 @@ class FilmorateApplicationTests {
     @DisplayName("Дата рождения = сегодняшний день - допустима")
     void shouldAcceptBirthdayToday() throws ValidationException {
         String today = java.time.LocalDate.now()
-                .format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         User user = new User("test@mail.ru", "Test", "testlogin", today);
         assertNotNull(user.getBirthday());
     }
@@ -147,7 +147,7 @@ class FilmorateApplicationTests {
     @DisplayName("Пустой email")
     void shouldRejectEmptyEmail() {
         ValidationException ex = assertThrows(ValidationException.class,
-                () -> new User("", "Test", "testlogin", "31.03.2002"));
+                () -> new User("", "Test", "testlogin", "2002-03-31"));
         assertEquals("Необходимо указать почту", ex.getMessage());
     }
 
@@ -155,7 +155,7 @@ class FilmorateApplicationTests {
     @DisplayName("Email без @")
     void shouldRejectEmailWithoutAt() {
         ValidationException ex = assertThrows(ValidationException.class,
-                () -> new User("testmail.ru", "Test", "testlogin", "31.03.2002"));
+                () -> new User("testmail.ru", "Test", "testlogin", "2002-03-31"));
         assertEquals("Неккоректный формат почты", ex.getMessage());
     }
 
@@ -163,7 +163,7 @@ class FilmorateApplicationTests {
     @DisplayName("Пустой login")
     void shouldRejectEmptyLogin() {
         ValidationException ex = assertThrows(ValidationException.class,
-                () -> new User("test@mail.ru", "Test", "", "31.03.2002"));
+                () -> new User("test@mail.ru", "Test", "", "2002-03-31"));
         assertEquals("Необходимо указать логин", ex.getMessage());
     }
 
@@ -171,7 +171,7 @@ class FilmorateApplicationTests {
     @DisplayName("Login с пробелом")
     void shouldRejectLoginWithSpace() {
         ValidationException ex = assertThrows(ValidationException.class,
-                () -> new User("test@mail.ru", "Test", "test login", "31.03.2002"));
+                () -> new User("test@mail.ru", "Test", "test login", "2002-03-31"));
         assertEquals("Логин не должен сожержать пробелы", ex.getMessage());
     }
 
@@ -179,7 +179,7 @@ class FilmorateApplicationTests {
     @DisplayName("Дата рождения в будущем")
     void shouldRejectFutureBirthday() {
         String tomorrow = java.time.LocalDate.now().plusDays(1)
-                .format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> new User("test@mail.ru", "Test", "testlogin", tomorrow));
         assertEquals("Дата рождения не может быть в будущем", ex.getMessage());
@@ -189,21 +189,21 @@ class FilmorateApplicationTests {
     @DisplayName("Неверный формат даты")
     void shouldRejectInvalidDateFormat() {
         assertThrows(java.time.format.DateTimeParseException.class,
-                () -> new User("test@mail.ru", "Test", "testlogin", "2002-03-31"));
+                () -> new User("test@mail.ru", "Test", "testlogin", "30.03.2002"));
     }
 
     @Test
     @DisplayName("email = null")
     void shouldRejectNullEmail() {
         assertThrows(ValidationException.class,
-                () -> new User(null, "Test", "testlogin", "31.03.2002"));
+                () -> new User(null, "Test", "testlogin", "2002-03-31"));
     }
 
     @Test
     @DisplayName("equals работает по id")
     void shouldCompareByIdUser() throws ValidationException {
-        User a = new User("a@mail.ru", "A", "a", "01.01.2000");
-        User b = new User("b@mail.ru", "B", "b", "02.02.2001");
+        User a = new User("a@mail.ru", "A", "a", "2000-01-01");
+        User b = new User("b@mail.ru", "B", "b", "2001-02-02");
         a.setId(1);
         b.setId(1);
         assertEquals(a, b);

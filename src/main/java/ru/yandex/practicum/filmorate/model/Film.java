@@ -14,8 +14,8 @@ import static ru.yandex.practicum.filmorate.FilmorateApplication.log;
 
 @Data
 public class Film {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private static final LocalDate MINIMUM_DATE = LocalDate.parse("28.12.1895", formatter);
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final LocalDate MINIMUM_DATE = LocalDate.parse("1895-12-28", formatter);
     public int id;
     public String name;
     public String description;
