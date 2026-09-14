@@ -6,7 +6,6 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
