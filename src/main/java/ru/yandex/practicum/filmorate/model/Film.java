@@ -20,7 +20,7 @@ public class Film {
     public String name;
     public String description;
     public LocalDate releaseDate;
-    public LocalTime duration;
+    public int duration;
 
     @JsonCreator
     public Film(@JsonProperty("name") String name, @JsonProperty("description") String description, @JsonProperty("releaseDate") String releaseDate, @JsonProperty("duration") int duration) throws ValidationException {
@@ -52,7 +52,7 @@ public class Film {
         this.name = name;
         this.description = description;
         this.releaseDate = convertRelease;
-        this.duration = LocalTime.of(duration / 60, duration % 60);
+        this.duration = duration;
     }
 
     @Override

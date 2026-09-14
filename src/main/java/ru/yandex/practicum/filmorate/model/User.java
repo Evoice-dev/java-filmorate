@@ -40,7 +40,8 @@ public class User {
             log.error("Пользователь не создан");
             throw new ValidationException("Логин не должен сожержать пробелы");
         }
-        if (name.isEmpty()) {
+
+        if (name == null) {
             this.name = login;
         } else {
             this.name = name;
