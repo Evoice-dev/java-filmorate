@@ -76,8 +76,7 @@ class FilmorateApplicationTests {
     @DisplayName("duration = 0 - допустимо")
     void shouldAcceptZeroDuration() throws ValidationException {
         Film film = new Film("Name", "Desc", "2010-07-16", 0);
-        assertEquals(0, film.getDuration().getHour());
-        assertEquals(0, film.getDuration().getMinute());
+        assertEquals(0, film.getDuration());
     }
 
     @Test
@@ -86,22 +85,6 @@ class FilmorateApplicationTests {
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> new Film("Name", "Desc", "2010-07-16", -1));
         assertEquals("Продолжительность должна быть положительным числом", ex.getMessage());
-    }
-
-    @Test
-    @DisplayName("duration = 90 - 01:30")
-    void shouldConvertDurationToLocalTime() throws ValidationException {
-        Film film = new Film("Name", "Desc", "2010-07-16", 90);
-        assertEquals(1, film.getDuration().getHour());
-        assertEquals(30, film.getDuration().getMinute());
-    }
-
-    @Test
-    @DisplayName("duration = 60 - 01:00")
-    void shouldConvertExactly60Minutes() throws ValidationException {
-        Film film = new Film("Name", "Desc", "2010-07-16", 60);
-        assertEquals(1, film.getDuration().getHour());
-        assertEquals(0, film.getDuration().getMinute());
     }
 
     @Test
