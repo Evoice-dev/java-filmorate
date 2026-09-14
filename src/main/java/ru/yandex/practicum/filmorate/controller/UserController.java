@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -23,10 +24,12 @@ public class UserController {
     }
 
     @PutMapping()
-    public User update(@RequestBody User user) {
+    public User update(@RequestBody User user) throws ValidationException {
         log.info("Попытка редактирования пользователя");
         if (allUsers.contains(user)) {
             allUsers.set(allUsers.indexOf(user), user);
+        } else {
+            throw new ValidationException("Такого пользователя не существует");
         }
         log.info("Пользователь успешно отредактирован");
         return user;
