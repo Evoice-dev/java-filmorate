@@ -43,7 +43,7 @@ public class User {
 
         if (name == null) {
             this.name = login;
-        }else if(name.isEmpty()){
+        } else if (name.isEmpty()) {
             this.name = login;
         } else {
             this.name = name;
