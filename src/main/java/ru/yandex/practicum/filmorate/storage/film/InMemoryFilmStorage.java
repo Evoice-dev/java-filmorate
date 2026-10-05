@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import static ru.yandex.practicum.filmorate.FilmorateApplication.log;
+import java.util.Optional;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
@@ -18,32 +17,27 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film add(Film film) {
-        log.info("Попытка добавить фильм");
         film.setId(nextId++);
         films.put(film.getId(), film);
-        log.info("Фильм успешно добавлен");
         return film;
     }
 
     @Override
     public Film update(Film film) {
-        log.info("Попытка редактирования фильма");
         if (!films.containsKey(film.getId())) {
             throw new NotFoundException("Такого фильма не существует");
         }
         films.put(film.getId(), film);
-        log.info("Фильм успешно отредактирован");
         return film;
     }
 
     @Override
-    public Film getById(int id) {
-        return films.get(id);
+    public Optional<Film> getById(int id) {
+        return Optional.ofNullable(films.get(id));
     }
 
     @Override
     public List<Film> getAll() {
-        log.info("Произошел запрос всех фильмов");
         return new ArrayList<>(films.values());
     }
 

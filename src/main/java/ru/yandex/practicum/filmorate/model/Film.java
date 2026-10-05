@@ -3,17 +3,18 @@ package ru.yandex.practicum.filmorate.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import static ru.yandex.practicum.filmorate.FilmorateApplication.log;
 
 @Data
+@EqualsAndHashCode(of = "id")
 public class Film {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final LocalDate MINIMUM_DATE = LocalDate.parse("1895-12-28", formatter);
@@ -63,17 +64,5 @@ public class Film {
         this.description = description;
         this.releaseDate = convertRelease;
         this.duration = duration;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Film film = (Film) o;
-        return id == film.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
     }
 }

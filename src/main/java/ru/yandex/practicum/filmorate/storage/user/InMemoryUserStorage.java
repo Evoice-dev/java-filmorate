@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import static ru.yandex.practicum.filmorate.FilmorateApplication.log;
+import java.util.Optional;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
@@ -18,32 +17,27 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User add(User user) {
-        log.info("Попытка добавить пользователя");
         user.setId(nextId++);
         users.put(user.getId(), user);
-        log.info("Пользователь успешно добавлен");
         return user;
     }
 
     @Override
     public User update(User user) {
-        log.info("Попытка редактирования пользователя");
         if (!users.containsKey(user.getId())) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         users.put(user.getId(), user);
-        log.info("Пользователь успешно отредактирован");
         return user;
     }
 
     @Override
-    public User getById(int id) {
-        return users.get(id);
+    public Optional<User> getById(int id) {
+        return Optional.ofNullable(users.get(id));
     }
 
     @Override
     public List<User> getAll() {
-        log.info("Произошел запрос всех пользователей");
         return new ArrayList<>(users.values());
     }
 
