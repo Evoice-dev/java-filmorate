@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.util.Set;
 import static ru.yandex.practicum.filmorate.FilmorateApplication.log;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class User {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -23,7 +25,7 @@ public class User {
     private String login;
     private String name;
     private LocalDate birthday;
-    private Set<Long> friends = new HashSet<>();
+    private Set<Integer> friends = new HashSet<>();
 
     @JsonCreator
     public User(@JsonProperty("email") String email,
